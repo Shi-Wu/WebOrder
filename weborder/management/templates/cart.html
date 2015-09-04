@@ -7,11 +7,12 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2 well">
-			<h2>&emsp;About Us!</h2>
-            <p>
-                This Is A Course-Design Project of Software Engineer of Jilin University
-            </p>
-			<h4 class="text-center">Email:<span  class="text-info">imkean@163.com</span></h4>
+			{% if cart_count == 0 %}
+                <h2><p> Sorry,Your Cart Is Empty!</p></h2>
+            {% else %}
+
+            {% endif %}
+			<h3 class="text-center">Email:<span  class="text-info">imkean@163.com</span></h3>
 		</div>
 	</div>
 </div>

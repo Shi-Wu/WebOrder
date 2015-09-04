@@ -16,18 +16,44 @@ def get_type_list():
     return list(type_list)
 
 
+def cart(req):
+    username = req.session.get('username', '')
+    if username:
+        user = MyUser.objects.get(user__username=username)
+    else:
+        user = ''
+    content = {'active_menu': 'homepage', 'user': user,'cart_count':0}
+    return render_to_response("cart.html",content)
+
+
+def history(req):
+    username = req.session.get('username', '')
+    if username:
+        user = MyUser.objects.get(user__username=username)
+    else:
+        user = ''
+    content = {'active_menu': 'homepage', 'user': user,'cart_count':0}
+    return render_to_response("history.html",content)
+
+
 def home(req):
     username = req.session.get('username', '')
     if username:
         user = MyUser.objects.get(user__username=username)
     else:
         user = ''
-    content = {'active_menu': 'homepage', 'user': user,'img_list':HomeImg.objects.all()}
+    content = {'active_menu': 'homepage', 'user': user,'img_list':HomeImg.objects.all(),'cart_count':0}
     return render_to_response("home.html",content)
 
 
 def about(req):
-    return render_to_response("about.html")
+    username = req.session.get('username', '')
+    if username:
+        user = MyUser.objects.get(user__username=username)
+    else:
+        user = ''
+    content = {'active_menu': 'homepage', 'user': user}
+    return render_to_response("about.html",content)
 
 
 def index(req):
@@ -36,7 +62,7 @@ def index(req):
         user = MyUser.objects.get(user__username=username)
     else:
         user = ''
-    content = {'active_menu': 'homepage', 'user': user}
+    content = {'active_menu': 'homepage', 'user': user,'img_list':HomeImg.objects.all(),'cart_count':0}
     return render_to_response('index.html', content)
 
 

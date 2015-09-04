@@ -26,27 +26,35 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a href="/" class="navbar-brand">Web Order</a>
+					<a href="/" class="navbar-brand"><span class="glyphicon glyphicon-home"></span>&nbsp;Web Order</a>
 				</div>
 
 				<div class="collapse navbar-collapse" id="navbar-collapse-basepage">
 					<ul class="nav navbar-nav">
-						<li id="homepage"><a href="/home">Home</a></li>
-						<li id="viewbook"><a href="/viewbook/">Browse Instruments</a></li>
-						<li id="aboutpage"><a href="/about/">About</a></li>
+						<li id="viewbook"><a href="/viewbook/"><span class="glyphicon glyphicon-list"></span>&nbsp;Browse Instruments</a></li>
+						<li id="aboutpage"><a href="/about/"><span class="glyphicon glyphicon-info-sign"></span>&nbsp;About</a></li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
 						{% if user %}
-							<li><p class="navbar-text">Welcome &nbsp;&nbsp;<span id="base_name">{{ user.nickname }}</span></p></li>
-							<li><a href="/logout/">Sign Out</a></li>
-							<li><a href="/setpasswd/">Change Password</a></li>
-						{% else %}
-							<li><a href="/signup/">Register</a></li>
-							<li><a href="/login/">Sign In</a></li>
-						{% endif %}
-					</ul>
-				</div>
+                            <li><a href="/cart/"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;Cart&nbsp;<span class="badge">{{ cart_count }}</span></a></li>
 
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                    <span class="glyphicon glyphicon-user"></span>&nbsp;{{ user.nickname }} <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li> <a href="/history/"><span class="glyphicon glyphicon-tasks"></span>&nbsp;History Order List</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="/logout/"><span class="glyphicon glyphicon-log-out"></span>&nbsp;Sign Out</a></li>
+                                    <li><a href="/setpasswd/"><span class="glyphicon glyphicon-lock"></span>&nbsp;Set Password</a></li>
+                                </ul>
+                            </li>
+                        {% else %}
+                            <li><a href="/signup/"><span class="glyphicon glyphicon-registration-mark"></span>&nbsp;Register</a></li>
+                            <li><a href="/login/"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Sign In</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
 			</div>
 		</nav>
 		<!-- /nav -->

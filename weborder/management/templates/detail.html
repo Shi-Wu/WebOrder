@@ -33,14 +33,17 @@
 					<p class="text-center">No Images At Present</p>
 				{% endif %}
 			</div>
-			<div class="col-md-6 col-md-offset-1">
+			<h3 class="col-md-6 col-md-offset-1">
 				<h2 class="text-center">{{book.name}}</h2>
 				<br>
 				<h3>Brand：{{book.author}}</h3>
 				<h3>Category：{{book.typ}}</h3>
 				<h3>Date：{{book.pubDate|date:"Y-m-d"}}</h3>
 				<h3>Price：{{ book.price|floatformat:2 }}</h3>
-				<button type="button" class="btn btn-lg btn-primary">Add to Cart</button>
+                <form class="form-inline" role="form">
+               <h4> <label>Amount</label>&nbsp;<input type="text" class="form-control" id="name" placeholder="Please Input Amount" value = 1>
+				<button type="button" class="btn btn-lg btn-primary">Add to Cart</button></h4>
+                </form>
 			</div>
 		</div>
 	</div>
