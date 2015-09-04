@@ -1,3 +1,5 @@
+# coding :utf-8
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -13,10 +15,12 @@ class MyUser(models.Model):
 
 class Instruments(models.Model):
     name = models.CharField(max_length=128)
-    price = models.FloatField()
-    author = models.CharField(max_length=128)
+    price = models.FloatField(default=0.0)
+    author = models.CharField(max_length=128)  # brand
     pubDate = models.DateField()
-    typ = models.CharField(max_length=128)
+    typ = models.CharField(max_length=128)  #
+    desc = models.TextField(default="")
+    weight = models.FloatField(default=0)
 
     class META:
         ordering = ['name']
@@ -29,7 +33,7 @@ class Img(models.Model):
     name = models.CharField(max_length=128)
     desc = models.TextField()
     img = models.ImageField(upload_to='image')
-    book = models.ForeignKey(Instruments)
+    item = models.ForeignKey(Instruments)
 
     class META:
         ordering = ['name']
@@ -50,7 +54,43 @@ class HomeImg(models.Model):
         ordering = ['name']
 
 
-#class Cart(models.Model):
-#    userid=models.ForeignKey(MyUser.user)
-#    instrid=models.ForeignKey(Instruments.name)
-#    count=models.IntegerField()
+class OrderList(models.Model):
+    user = models.ForeignKey(MyUser)
+    sum_price = models.FloatField()
+    date = models.DateTimeField()
+    weight = models.FloatField()
+    address = models.CharField(max_length=128)
+    transport = models.CharField(max_length=256)
+
+    def __unicode__(self):
+        return str(self.user.user_id)
+
+
+
+
+class OrderDetail(models.Model):
+    order_id = models.ForeignKey(OrderList)
+    item_id = models.ForeignKey(Instruments)
+    count = models.IntegerField()
+    price = models.FloatField()  # sold price in all
+    weight = models.FloatField()  # all weight
+
+    def __unicode__(self):
+        return str(self.order_id)
+
+    class META:
+        ordering = ['order_id']
+
+
+class Cart(models.Model):
+    user = models.ForeignKey(MyUser)
+    item_id = models.ForeignKey(Instruments)
+    count = models.IntegerField()
+    price = models.FloatField()
+    weight = models.FloatField()
+
+    def __unicode__(self):
+        return str(self.item_id)
+
+    class META:
+        ordering = ['item_id']

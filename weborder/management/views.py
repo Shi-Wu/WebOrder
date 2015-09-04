@@ -186,6 +186,6 @@ def detail(req):
         book = Instruments.objects.get(pk=Id)
     except:
         return HttpResponseRedirect('/viewbook/')
-    img_list = Img.objects.filter(book=book)
+    img_list = Img.objects.filter(item=book)
     content = {'user': user, 'active_menu': 'viewbook', 'book': book, 'img_list': img_list}
     return render_to_response('detail.html', content)
