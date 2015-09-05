@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
-{% block title %}Instruments{% endblock %}
+{% block title %}Cart{% endblock %}
 
 {% block content %}
 
@@ -10,9 +10,13 @@
 			{% if cart_count == 0 %}
                 <h2><p> Sorry,Your Cart Is Empty!</p></h2>
             {% else %}
+                <label class="checkbox-inline">
+                    <input type="checkbox" id="checkbox_choose_all" value="all">All
+                </label>
                 <table class="table table-hover">
                     <thead>
                     <tr>
+                        <th>Check </th>
                         <th>No.</th>
                         <th>Item</th>
                         <th>Count</th>
@@ -22,13 +26,13 @@
                     </thead>
                     <tbody>
                     {% for item in item_list %}
-                        <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td><a href="{% url 'view_detail' %}?id={{item.item_id.id}}">{{ item.item_id.name }}</a></td>
-                            <td>{{ item.count }}</td>
-                            <td>{{ item.weight }}</td>
-                            <td>{{ item.price|floatformat:2 }}</td>
-                        </tr>
+                        <td><input type="checkbox" value="{{ item.item_id.id}}" id="cart_check_box{{forloop.counter}}"></td>
+                        <td>{{ forloop.counter }}</td>
+                        <td><a href="{% url 'view_detail' %}?id={{item.item_id.id}}">{{ item.item_id.name }}</a></td>
+                        <td>{{ item.count }}</td>
+                        <td>{{ item.weight }}</td>
+                        <td>{{ item.price|floatformat:2 }}</td>
+                        </tbody>
                     {% empty %}
                         <tr>
                             <td>No Instruments At Present</td>
@@ -37,7 +41,30 @@
                     </tbody>
                 </table>
             {% endif %}
-            <h3 class="text-center">Email:<span  class="text-info">imkean@163.com</span></h3>
+        <script type="text/javascript">
+            function chooseAll()
+            {
+                var x=document.getElementById("checkbox_choose_all").checked;
+                if(!x) return;
+                var cnt=1;
+                var have=True;
+                while(have)
+                {
+                    var cur=document.getElementById("cart_checkbox_"+cnt.toString());
+                    if(cur)
+                    {
+
+                    }
+                    else
+                    {
+                        break;
+                    }
+
+                }
+            }
+
+        </script>
+
         </div>
     </div>
 </div>

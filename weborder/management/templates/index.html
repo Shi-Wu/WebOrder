@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
-{% block title %}Instruments{% endblock %}
+{% block title %}Web Order{% endblock %}
 
 {% block content %}
 
@@ -13,7 +13,10 @@
         </ol>
         <div class="carousel-inner" role="listbox">
             {% for img in img_list %}
-            <div {% if forloop.first %}class="item active"{%else%}class="item"{% endif %}>
+            <div {% if forloop.first %}class="item active"{%else%}class="item"{% endif %} >
+            <h3 class="carousel-caption">
+                {{ img.desc }}
+            </h3>
                 <img class="img-rounded" src="/{{img.img}}">
             </div>
             {% endfor %}

@@ -11,7 +11,7 @@ class MyUser(models.Model):
     permission = models.IntegerField()
 
     def __unicode__(self):
-        return self.user.username
+        return self.user.username+" "+self.nickname+" "+str(self.permission)
 
 
 class Instruments(models.Model):
@@ -47,6 +47,7 @@ class HomeImg(models.Model):
     name = models.CharField(max_length=128)
     type = models.CharField(max_length=128)
     img = models.ImageField(upload_to='image')
+    desc = models.TextField(default="This Is Description Text")
 
     def __unicode__(self):
         return self.name
@@ -64,8 +65,7 @@ class OrderList(models.Model):
     transport = models.CharField(max_length=256)
 
     def __unicode__(self):
-        return str(self.id)
-
+        return str(self.id)+" "+self.user.nickname
 
 
 class OrderDetail(models.Model):
@@ -76,7 +76,7 @@ class OrderDetail(models.Model):
     weight = models.FloatField()  # all weight
 
     def __unicode__(self):
-        return str(self.order_id)
+        return str(self.order_id)+" "+self.item_id.name
 
     class META:
         ordering = ['order_id']
@@ -90,7 +90,7 @@ class Cart(models.Model):
     weight = models.FloatField()
 
     def __unicode__(self):
-        return str(self.item_id)
+        return str(self.item_id)+" "+self.user.nickname
 
     class META:
         ordering = ['item_id']

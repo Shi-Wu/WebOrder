@@ -40,10 +40,12 @@
 				<h3>Category：{{book.typ}}</h3>
                 <h3>Date：{{book.pubDate|date:"Y-m-d"}}</h3>
                 <h3>Price：{{ book.price|floatformat:2 }}</h3>
+                {% if user %}
                 <form class="form-inline" role="form">
                     <h4> <label>Amount</label>&nbsp;<input type="text" required onkeyup="check()" class="form-control" id="id_amount" placeholder="Please Input Amount" value = 1>
                         <button type="button" class="btn btn-lg btn-primary">Add to Cart</button></h4>
                 </form>
+                {% endif %}
                 <script>
                     function check()
                     {

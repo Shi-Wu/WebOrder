@@ -5,6 +5,7 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="{%  static "img/icon.ico" %}">
 		<title>{% block title %}{% endblock %}</title>
 		<link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}">
 		<link rel="stylesheet" type="text/css" href="{% static "css/bootstrap-theme.min.css" %}">
@@ -17,7 +18,7 @@
 			<script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
 		<![endif]-->
 	</head>
-	<body>
+	<body background="{% static "imgi/nav_background.jpg" %}">
 		<!--Here is the navbar-->
 		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 			<div class="container">
@@ -62,10 +63,10 @@
 		</nav>
 		<!-- /nav -->
 		<!-- header -->
-		<header class="jumbotron subhead" id="header-base">
-			<div class="container">
+		<header class="jumbotron subhead" id="header-base" >
+			<div class="container" >
 				<h1>Web Order</h1>
-				<h3>&emsp;&emsp;Music Your Life!</h3>
+				<h2>&emsp;&emsp;The Best Web to Get Your Lovely Instruments , Music Starts Here !</h2>
 			</div>
 		</header>
 		<!-- /.header -->
@@ -74,7 +75,7 @@
 		<!-- /.main -->
 	
 		<!-- footer -->
-        <br/><br/><hr/>
+        <br/><br/>
 		<footer class="footer" role="contentinfo">
 			<hr>
 			<div class="container">
