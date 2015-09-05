@@ -67,7 +67,6 @@ class OrderList(models.Model):
 
 
 
-
 class OrderDetail(models.Model):
     order_id = models.ForeignKey(OrderList)
     item_id = models.ForeignKey(Instruments)

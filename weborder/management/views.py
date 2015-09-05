@@ -16,24 +16,22 @@ def get_type_list():
     return list(type_list)
 
 
+def get_cart_count(usr):
+    if usr:
+        return Cart.objects.filter(user=usr).count()
+    else:
+        return 0
+
+
+
 def cart(req):
     username = req.session.get('username', '')
     if username:
         user = MyUser.objects.get(user__username=username)
     else:
         user = ''
-    content = {'active_menu': 'homepage', 'user': user,'cart_count':0}
+    content = {'active_menu': 'cart', 'user': user,'cart_count':get_cart_count(user)}
     return render_to_response("cart.html",content)
-
-
-def history(req):
-    username = req.session.get('username', '')
-    if username:
-        user = MyUser.objects.get(user__username=username)
-    else:
-        user = ''
-    content = {'active_menu': 'homepage', 'user': user,'cart_count':0}
-    return render_to_response("history.html",content)
 
 
 def home(req):
@@ -42,7 +40,7 @@ def home(req):
         user = MyUser.objects.get(user__username=username)
     else:
         user = ''
-    content = {'active_menu': 'homepage', 'user': user,'img_list':HomeImg.objects.all(),'cart_count':0}
+    content = dict(active_menu='homepage', user=user, img_list=HomeImg.objects.all(), cart_count=get_cart_count(user))
     return render_to_response("home.html",content)
 
 
@@ -52,7 +50,10 @@ def about(req):
         user = MyUser.objects.get(user__username=username)
     else:
         user = ''
-    content = {'active_menu': 'homepage', 'user': user}
+    content = {'active_menu': 'about',
+               'user': user,
+               'cart_count':get_cart_count(user),
+               }
     return render_to_response("about.html",content)
 
 
@@ -62,7 +63,12 @@ def index(req):
         user = MyUser.objects.get(user__username=username)
     else:
         user = ''
-    content = {'active_menu': 'homepage', 'user': user,'img_list':HomeImg.objects.all(),'cart_count':0}
+    cart_cout=get_cart_count(user)
+    content = {'active_menu': 'homepage',
+               'user': user,
+               'img_list':HomeImg.objects.all(),
+               'cart_count':cart_cout,
+               }
     return render_to_response('index.html', content)
 
 
@@ -135,7 +141,11 @@ def setpasswd(req):
                 status = 're_err'
         else:
             status = 'passwd_err'
-    content = {'user': user, 'active_menu': 'homepage', 'status': status}
+    content = {'user': user,
+               'active_menu': 'user_menu',
+               'status': status,
+               'cart_count':get_cart_count(user),
+               }
     return render_to_response('setpasswd.html', content, context_instance=RequestContext(req))
 
 
@@ -160,7 +170,25 @@ def add(req):
         newbook.save()
         status = 'success'
     content = {'user': user, 'active_menu': 'addbook', 'status': status}
-    return render_to_response('addbook.html', content, context_instance=RequestContext(req))
+    return render_to_response('add.html', content, context_instance=RequestContext(req))
+
+
+def history(req):
+    username = req.session.get('username', '')
+    if username:
+        usr = MyUser.objects.get(user__username=username)
+    else:
+        usr = ''
+    print username
+    print usr.user_id
+    order_list = OrderList.objects.filter(user=usr)
+
+    content = {'active_menu': 'user_menu',
+               'user': usr,
+               'cart_count':get_cart_count(usr),
+               'order_list':order_list,
+               }
+    return render_to_response("history.html",content)
 
 
 def view(req):
@@ -194,8 +222,13 @@ def view(req):
     except EmptyPage:
         book_list = paginator.page(paginator.num_pages)
 
-    content = {'user': user, 'active_menu': 'viewbook', 'type_list': type_list, 'book_type': book_type,
-               'book_list': book_list}
+    content = {'user': user,
+               'active_menu': 'viewpage',
+               'type_list': type_list,
+               'book_type': book_type,
+               'book_list': book_list,
+               'cart_count': get_cart_count(user),
+               }
     return render_to_response('view.html', content, context_instance=RequestContext(req))
 
 
@@ -213,5 +246,10 @@ def detail(req):
     except:
         return HttpResponseRedirect('/viewbook/')
     img_list = Img.objects.filter(item=book)
-    content = {'user': user, 'active_menu': 'viewbook', 'book': book, 'img_list': img_list}
+    content = {'user': user,
+               'active_menu': 'viewbook',
+               'book': book,
+               'img_list': img_list,
+               'cart_count':get_cart_count(user),
+               }
     return render_to_response('detail.html', content)

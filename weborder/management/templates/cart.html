@@ -10,11 +10,36 @@
 			{% if cart_count == 0 %}
                 <h2><p> Sorry,Your Cart Is Empty!</p></h2>
             {% else %}
-
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Name</th>
+                        <th>Brand</th>
+                        <th>Date</th>
+                        <th>Price</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for book in book_list %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td><a href="{% url 'view_detail' %}?id={{book.id}}">{{ book.name }}</a></td>
+                            <td>{{ book.author }}</td>
+                            <td>{{ book.pubDate|date:"Y-m-d" }}</td>
+                            <td>{{ book.price|floatformat:2 }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td>No Instruments At Present</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             {% endif %}
-			<h3 class="text-center">Email:<span  class="text-info">imkean@163.com</span></h3>
-		</div>
-	</div>
+            <h3 class="text-center">Email:<span  class="text-info">imkean@163.com</span></h3>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

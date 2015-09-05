@@ -38,17 +38,29 @@
 				<br>
 				<h3>Brand：{{book.author}}</h3>
 				<h3>Category：{{book.typ}}</h3>
-				<h3>Date：{{book.pubDate|date:"Y-m-d"}}</h3>
-				<h3>Price：{{ book.price|floatformat:2 }}</h3>
+                <h3>Date：{{book.pubDate|date:"Y-m-d"}}</h3>
+                <h3>Price：{{ book.price|floatformat:2 }}</h3>
                 <form class="form-inline" role="form">
-               <h4> <label>Amount</label>&nbsp;<input type="text" class="form-control" id="name" placeholder="Please Input Amount" value = 1>
-				<button type="button" class="btn btn-lg btn-primary">Add to Cart</button></h4>
+                    <h4> <label>Amount</label>&nbsp;<input type="text" required onkeyup="check()" class="form-control" id="id_amount" placeholder="Please Input Amount" value = 1>
+                        <button type="button" class="btn btn-lg btn-primary">Add to Cart</button></h4>
                 </form>
-                <form name="myForm" action="/detail" onsubmit="return validateForm()" method="post">姓: <input type="text" name="fname">
-                <input type="submit" value="提交">
-			</div>
-		</div>
-	</div>
+                <script>
+                    function check()
+                    {
+                        var x=document.getElementById("id_amount");
+                        if(!$.isNumeric(x.value))
+                        {
+                            //alert("Not A Number");
+                            x.value = 1;
+                            return false;
+                        }
+                        return true;
+                    }
+                </script>
+            </h3>
+        </div>
+    </div>
 </div>
+    </div>
 
 {% endblock %}

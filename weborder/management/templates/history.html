@@ -8,11 +8,48 @@
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2 well">
 			<h2>&emsp;History Order Lists.</h2>
-            <p>
+
+            <table class="table table-hover">
+					<thead>
+						<tr>
+							<th>No.</th>
+                            <th>Order ID</th>
+							<th>price</th>
+							<th>weight</th>
+							<th>Date Time</th>
+							<th>address</th>
+							<th>address</th>
+                            <th>Transport</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for order in order_list %}
+						<tr>
+							<td>{{ forloop.counter }}</td>
+							<td><a href="{% url 'history' %}?oder_id={{order.id}}">{{ order.id }}</a></td>
+							<td>${{ order.sum_price|floatformat:4 }}</td>
+							<td>{{ order.weight|floatformat:4}}kg</td>
+							<td>{{ order.date }}</td>
+							<td>{{ order.address}}</td>
+							<td>{{ order.user}}</td>
+							<td>{{ order.transport}}</td>
+						</tr>
+						{% empty %}
+						<tr>
+							<td>No Instruments At Present</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+
+
+
+            <br/> <br/> <hr/>
+			<h4 class="text-center">Email:<span  class="text-info">imkean@163.com</span></h4>
+            <p class="text-center">
                 This Is A Course-Design Project of Software Engineer of Jilin University
             </p>
-			<h4 class="text-center">Email:<span  class="text-info">imkean@163.com</span></h4>
-		</div>
+        </div>
 	</div>
 </div>
 

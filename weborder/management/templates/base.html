@@ -11,6 +11,7 @@
 		<link rel="stylesheet" type="text/css" href="{% static "css/base.css" %}">
 		<script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
 		<script type="text/javascript" src="{% static "js/bootstrap.min.js" %}"></script>
+
 		<!--[if lt IE 9]>
 			<script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 			<script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
@@ -26,19 +27,21 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a href="{% url 'index' %}" class="navbar-brand"><span class="glyphicon glyphicon-home"></span>&nbsp;Web Order</a>
 				</div>
-
 				<div class="collapse navbar-collapse" id="navbar-collapse-basepage">
 					<ul class="nav navbar-nav">
-						<li id="viewbook"><a href="{% url 'view_instrument' %}"><span class="glyphicon glyphicon-list"></span>&nbsp;Browse Instruments</a></li>
-						<li id="aboutpage"><a href="{% url 'about' %}"><span class="glyphicon glyphicon-info-sign"></span>&nbsp;About</a></li>
+                        <li id="homepage"><a href="{% url 'index' %}" class="navbar-brand">
+                            <span class="glyphicon glyphicon-home"></span>&nbsp;Web Order</a></li>
+						<li id="viewpage"><a href="{% url 'view_instrument' %}">
+                            <span class="glyphicon glyphicon-list"></span>&nbsp;Browse Instruments</a></li>
+						<li id="about"><a href="{% url 'about' %}">
+                            <span class="glyphicon glyphicon-info-sign"></span>&nbsp;About</a></li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
 						{% if user %}
-                            <li><a href="{% url 'cart' %}"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;Cart&nbsp;<span class="badge">{{ cart_count }}</span></a></li>
+                            <li id="cart"><a href="{% url 'cart' %}"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;Cart&nbsp;<span class="badge">{{ cart_count }}</span></a></li>
 
-                            <li class="dropdown">
+                            <li class="dropdown" id="user_menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                     <span class="glyphicon glyphicon-user"></span>&nbsp;{{ user.nickname }} <span class="caret"></span>
                                 </a>
