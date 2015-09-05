@@ -139,7 +139,7 @@ def setpasswd(req):
     return render_to_response('setpasswd.html', content, context_instance=RequestContext(req))
 
 
-def addbook(req):
+def add(req):
     username = req.session.get('username', '')
     if username != '':
         user = MyUser.objects.get(user__username=username)
@@ -163,7 +163,7 @@ def addbook(req):
     return render_to_response('addbook.html', content, context_instance=RequestContext(req))
 
 
-def viewbook(req):
+def view(req):
     username = req.session.get('username', '')
     if username != '':
         user = MyUser.objects.get(user__username=username)
@@ -196,7 +196,7 @@ def viewbook(req):
 
     content = {'user': user, 'active_menu': 'viewbook', 'type_list': type_list, 'book_type': book_type,
                'book_list': book_list}
-    return render_to_response('viewbook.html', content, context_instance=RequestContext(req))
+    return render_to_response('view.html', content, context_instance=RequestContext(req))
 
 
 def detail(req):
