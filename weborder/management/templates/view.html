@@ -9,11 +9,11 @@
 		<div class="col-md-10 col-md-offset-1">
 			<div class="col-md-2">
 				<div class="list-group">
-					<a href="/viewbook/" class="list-group-item" id="id_typ_all">
+					<a href="{% url 'view_instrument' %}?type=all" class="list-group-item" id="id_typ_all">
 						Category
 					</a>
 					{% for typ in type_list %}
-					<a href="/viewbook?typ={{typ}}" class="list-group-item" id="id_typ_{{typ}}">
+					<a href="{% url 'view_instrument' %}?type={{typ}}" class="list-group-item" id="id_typ_{{typ}}">
 						{{ typ }}
 					</a>
 					{% endfor %}
@@ -42,7 +42,8 @@
 						},1500);
 					}
 				</script>
-				<table class="table table-hover">
+            <br/><br/>
+				<table class="table table-hover table-striped">
 					<thead>
 						<tr>
 							<th>No.</th>

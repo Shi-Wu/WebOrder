@@ -23,14 +23,18 @@ def get_cart_count(usr):
         return 0
 
 
-
 def cart(req):
     username = req.session.get('username', '')
     if username:
         user = MyUser.objects.get(user__username=username)
     else:
         user = ''
-    content = {'active_menu': 'cart', 'user': user,'cart_count':get_cart_count(user)}
+    item_list=Cart.objects.filter(user=user);
+    content = {'active_menu': 'cart',
+               'user': user,
+               'cart_count':get_cart_count(user),
+               'item_list':item_list,
+               }
     return render_to_response("cart.html",content)
 
 
@@ -178,7 +182,7 @@ def history(req):
     if username:
         usr = MyUser.objects.get(user__username=username)
     else:
-        usr = ''
+        return index(req)
     print username
     print usr.user_id
     order_list = OrderList.objects.filter(user=usr)
@@ -191,6 +195,28 @@ def history(req):
     return render_to_response("history.html",content)
 
 
+def order_list(req):
+   # return home(req)
+    username = req.session.get('username', '')
+    if username != '':
+        user = MyUser.objects.get(user__username=username)
+    else:
+        return index(req)
+    order_id = req.GET.get('order_id', '')
+    if order_id == '':
+        return HttpResponseRedirect('/history/')
+    try:
+        order_items = OrderDetail.objects.filter(order_id__id=order_id)
+    except:
+        return HttpResponseRedirect('/history/')
+    content = {'user': user,
+               'active_menu': 'user_menu',
+               'order_items': order_items,
+               'cart_count':get_cart_count(user),
+               }
+    return render_to_response('orderlist.html', content)
+
+
 def view(req):
     username = req.session.get('username', '')
     if username != '':
@@ -198,7 +224,7 @@ def view(req):
     else:
         user = ''
     type_list = get_type_list()
-    book_type = req.GET.get('typ', 'all')
+    book_type = req.GET.get('type', 'all')
     if book_type == '':
         book_lst = Instruments.objects.all()
     elif book_type not in type_list:
@@ -240,15 +266,15 @@ def detail(req):
         user = ''
     Id = req.GET.get('id', '')
     if Id == '':
-        return HttpResponseRedirect('/viewbook/')
+        return HttpResponseRedirect('/view/')
     try:
-        book = Instruments.objects.get(pk=Id)
+        instrument = Instruments.objects.get(pk=Id)
     except:
-        return HttpResponseRedirect('/viewbook/')
-    img_list = Img.objects.filter(item=book)
+        return HttpResponseRedirect('/view/')
+    img_list = Img.objects.filter(item=instrument)
     content = {'user': user,
-               'active_menu': 'viewbook',
-               'book': book,
+               'active_menu': 'viewpage',
+               'book': instrument,
                'img_list': img_list,
                'cart_count':get_cart_count(user),
                }

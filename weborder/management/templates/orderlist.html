@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title %}Order List{% endblock %}
+
+{% block content %}
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2 well">
+			{% if cart_count == 0 %}
+                <h2><p> Sorry,Your Cart Is Empty!</p></h2>
+            {% else %}
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Item</th>
+                        <th>Count</th>
+                        <th>Weight</th>
+                        <th>Price</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in order_items %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td><a href="{% url 'view_detail' %}?id={{item.item_id.id}}">{{ item.item_id.name }}</a></td>
+                            <td>{{ item.count }}</td>
+                            <td>{{ item.weight }}</td>
+                            <td>{{ item.price|floatformat:2 }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td>No Instruments At Present</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+            <h3 class="text-center">Email:<span  class="text-info">isdf sdf sfsmkean@163.com</span></h3>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

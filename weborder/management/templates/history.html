@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
-{% block title %}Instruments{% endblock %}
+{% block title %}History Lists{% endblock %}
 
 {% block content %}
 
@@ -9,7 +9,7 @@
 		<div class="col-md-8 col-md-offset-2 well">
 			<h2>&emsp;History Order Lists.</h2>
 
-            <table class="table table-hover">
+            <table class="table table-hover  table-bordered">
 					<thead>
 						<tr>
 							<th>No.</th>
@@ -26,7 +26,7 @@
 						{% for order in order_list %}
 						<tr>
 							<td>{{ forloop.counter }}</td>
-							<td><a href="{% url 'history' %}?oder_id={{order.id}}">{{ order.id }}</a></td>
+							<td><a href="{% url 'order_list' %}?order_id={{order.id}}">{{ order.id }}</a></td>
 							<td>${{ order.sum_price|floatformat:4 }}</td>
 							<td>{{ order.weight|floatformat:4}}kg</td>
 							<td>{{ order.date }}</td>
