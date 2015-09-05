@@ -11,7 +11,7 @@
                 <h2><p> Sorry,Your Cart Is Empty!</p></h2>
             {% else %}
                 <label class="checkbox-inline">
-                    <input type="checkbox" id="checkbox_choose_all" value="all">All
+                    <input type="checkbox" id="checkbox_choose_all" value="all" onclick="chooseAll()">All
                 </label>
                 <table class="table table-hover">
                     <thead>
@@ -26,7 +26,7 @@
                     </thead>
                     <tbody>
                     {% for item in item_list %}
-                        <td><input type="checkbox" value="{{ item.item_id.id}}" id="cart_check_box{{forloop.counter}}"></td>
+                        <td><input type="checkbox" value="{{ item.item_id.id}}" id="cart_check_box_{{forloop.counter}}"></td>
                         <td>{{ forloop.counter }}</td>
                         <td><a href="{% url 'view_detail' %}?id={{item.item_id.id}}">{{ item.item_id.name }}</a></td>
                         <td>{{ item.count }}</td>
@@ -44,22 +44,21 @@
         <script type="text/javascript">
             function chooseAll()
             {
-                var x=document.getElementById("checkbox_choose_all").checked;
-                if(!x) return;
+                //alert("chooseAll")
+                var val=document.getElementById("checkbox_choose_all").checked;
                 var cnt=1;
-                var have=True;
-                while(have)
+                while(true)
                 {
-                    var cur=document.getElementById("cart_checkbox_"+cnt.toString());
-                    if(cur)
+                    var cur=document.getElementById("cart_check_box_"+cnt.toString());
+                    cnt+=1;
+                    if(cur!=null)
                     {
-
+                        cur.checked=val;
                     }
                     else
                     {
                         break;
                     }
-
                 }
             }
 

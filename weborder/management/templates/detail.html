@@ -6,8 +6,8 @@
 
 <div class="container">
 	<div class="row">
-		<div class="col-md-10 col-md-offset-1">
-			<div class="col-md-5">
+		<div class="col-md-12 "> <!--col-md-10 col-md-offset-1-->
+			<div class="col-md-8">
 				{% if img_list %}
 					<div id="carousel-generic" class="carousel slide" data-ride="carousel">
 						<ol class="carousel-indicators">
@@ -33,17 +33,18 @@
 					<p class="text-center">No Images At Present</p>
 				{% endif %}
 			</div>
-			<h3 class="col-md-6 col-md-offset-1">
-				<h2 class="text-center">{{book.name}}</h2>
-				<br>
+			<h3 class="col-md-4">
+{#                col-md-6 col-md-offset-1#}
+				<h2 class="text-left"><b>{{book.name}}</b></h2>
 				<h3>Brand：{{book.author}}</h3>
 				<h3>Category：{{book.typ}}</h3>
                 <h3>Date：{{book.pubDate|date:"Y-m-d"}}</h3>
                 <h3>Price：{{ book.price|floatformat:2 }}</h3>
                 {% if user %}
                 <form class="form-inline" role="form">
-                    <h4> <label>Amount</label>&nbsp;<input type="text" required onkeyup="check()" class="form-control" id="id_amount" placeholder="Please Input Amount" value = 1>
-                        <button type="button" class="btn btn-lg btn-primary">Add to Cart</button></h4>
+                     <label><h3>Amount&nbsp;<input type="text" required onkeyup="check()"  size=6 class="form-control" id="id_amount" placeholder="Please Input Amount" value = 1>
+                         </h3></label>
+                       <br/>&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-lg btn-primary">  Add to Cart  </button>
                 </form>
                 {% endif %}
                 <script>
