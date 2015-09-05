@@ -1,6 +1,7 @@
 # coding :utf-8
 
 from django.db import models
+from django.db import connection
 from django.contrib.auth.models import User
 
 
@@ -63,7 +64,7 @@ class OrderList(models.Model):
     transport = models.CharField(max_length=256)
 
     def __unicode__(self):
-        return str(self.user.user_id)
+        return str(self.id)
 
 
 

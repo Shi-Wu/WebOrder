@@ -23,14 +23,18 @@ def get_cart_count(usr):
         return 0
 
 
-
 def cart(req):
     username = req.session.get('username', '')
     if username:
         user = MyUser.objects.get(user__username=username)
     else:
         user = ''
-    content = {'active_menu': 'cart', 'user': user,'cart_count':get_cart_count(user)}
+    item_list=Cart.objects.filter(user=user);
+    content = {'active_menu': 'cart',
+               'user': user,
+               'cart_count':get_cart_count(user),
+               'item_list':item_list,
+               }
     return render_to_response("cart.html",content)
 
 
@@ -189,6 +193,28 @@ def history(req):
                'order_list':order_list,
                }
     return render_to_response("history.html",content)
+
+
+def order_list(req):
+   # return home(req)
+    username = req.session.get('username', '')
+    if username != '':
+        user = MyUser.objects.get(user__username=username)
+    else:
+        user = ''
+    order_id = req.GET.get('order_id', '')
+    if order_id == '':
+        return HttpResponseRedirect('/history/')
+    try:
+        order_items = OrderDetail.objects.filter(pk=order_id)
+    except:
+        return HttpResponseRedirect('/history/')
+    content = {'user': user,
+               'active_menu': 'user_menu',
+               'order_items': order_items,
+               'cart_count':get_cart_count(user),
+               }
+    return render_to_response('orderlist.html', content)
 
 
 def view(req):

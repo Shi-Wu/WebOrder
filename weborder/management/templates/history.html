@@ -26,7 +26,7 @@
 						{% for order in order_list %}
 						<tr>
 							<td>{{ forloop.counter }}</td>
-							<td><a href="{% url 'history' %}?oder_id={{order.id}}">{{ order.id }}</a></td>
+							<td><a href="{% url 'order_list' %}?order_id={{order.id}}">{{ order.id }}</a></td>
 							<td>${{ order.sum_price|floatformat:4 }}</td>
 							<td>{{ order.weight|floatformat:4}}kg</td>
 							<td>{{ order.date }}</td>
