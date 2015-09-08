@@ -39,12 +39,13 @@
 				<h3>Brand：{{book.author}}</h3>
 				<h3>Category：{{book.typ}}</h3>
                 <h3>Date：{{book.pubDate|date:"Y-m-d"}}</h3>
+                <h3>Rest:{{book.price}}</h3>
                 <h3>Price：$ {{ book.price|floatformat:2 }}</h3>
                 <h3>Weight：{{ book.weight|floatformat:2 }} Kg</h3>
                 {% if user %}
                 <form class="form-inline" role="form" method="get" action="{% url 'add_to_cart' %}">
                 <input type = "hidden" value="{{book.id}}"  name="id">
-                     <label><h3>Amount&nbsp;<input type="text" required onkeyup="check()" name ="amount" size=6 class="form-control" id="id_amount" placeholder="Please Input Amount" value = 1>
+                     <label><h3>Amount&nbsp;<input type="number"  max="9999999999" min="1" required onkeyup="check()" name ="amount" size=6 class="form-control" id="id_amount" placeholder="Please Input Amount" value = 1>
                          </h3></label>
                        <br/>&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit"  class="btn btn-lg btn-primary">  Add to Cart  </button>
                 </form>

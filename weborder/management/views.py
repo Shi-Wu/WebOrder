@@ -33,12 +33,21 @@ def cart(req):
         user = MyUser.objects.get(user__username=username)
     else:
         user = ''
-    item_list=Cart.objects.filter(user=user);
+    item_list = Cart.objects.filter(user=user)
+    sum_price, sum_weight,sum_count = 0, 0, 0
+    for item in item_list:
+        sum_price += item.item_id.price*item.count
+        sum_weight += item.item_id.weight*item.count
+        sum_count += item.count
     content = {'active_menu': 'cart',
                'user': user,
-               'cart_count':get_cart_count(user),
-               'item_list':item_list,
+               'cart_count': get_cart_count(user),
+               'item_list': item_list,
+               'sum_price': sum_price,
+               'sum_weight': sum_weight,
+               'sum_count': sum_count,
                }
+
     return render_to_response("cart.html",content)
 
 
