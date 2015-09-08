@@ -1,6 +1,9 @@
+# coding: utf-8
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, render_to_response
 from django.template import Context, RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
+from django.http import Http404
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib import auth
@@ -23,6 +26,7 @@ def get_cart_count(usr):
         return 0
 
 
+@login_required
 def cart(req):
     username = req.session.get('username', '')
     if username:
@@ -67,11 +71,11 @@ def index(req):
         user = MyUser.objects.get(user__username=username)
     else:
         user = ''
-    cart_cout=get_cart_count(user)
+    cart_count = get_cart_count(user)
     content = {'active_menu': 'homepage',
                'user': user,
-               'img_list':HomeImg.objects.all(),
-               'cart_count':cart_cout,
+               'img_list': HomeImg.objects.all(),
+               'cart_count': cart_count,
                }
     return render_to_response('index.html', content)
 
@@ -100,6 +104,25 @@ def signup(req):
     return render_to_response('signup.html', content, context_instance=RequestContext(req))
 
 
+def is_already_login(username):  # 防止重复登录
+    user = MyUser.objects.get(user__username=username)
+    if user:
+
+        print user.user.is_authenticated(), username, user.user.username
+        return False
+        return user.user.is_authenticated()
+    else:
+        return False
+
+
+def user_logout(username):
+    user = MyUser.objects.get(username=username)
+    if user.user.is_authenticated():
+        return True
+    else:
+        return False
+
+
 def login(req):
     if req.session.get('username', ''):
         return HttpResponseRedirect('/')
@@ -107,26 +130,35 @@ def login(req):
     if req.POST:
         post = req.POST
         username = post.get('username', '')
-        password = post.get('passwd', '')
-        user = auth.authenticate(username=username, password=password)
-        if user is not None:
-            if user.is_active:
-                auth.login(req, user)
-                req.session['username'] = username
-                return HttpResponseRedirect('/')
-            else:
-                status = 'not_active'
+        if is_already_login(username):
+            status = 'login_at_other_place'
         else:
-            status = 'not_exist_or_passwd_err'
+            password = post.get('passwd', '')
+            user = auth.authenticate(username=username, password=password)
+            if user is not None:
+                if user.is_active:
+                    auth.login(req, user)
+                    req.session['username'] = username
+                    return HttpResponseRedirect('/')
+                else:
+                    status = 'not_active'
+            else:
+                status = 'not_exist_or_passwd_err'
     content = {'active_menu': 'homepage', 'status': status, 'user': ''}
+    if req.GET:
+        url = req.GET.get("next", "/")
+        print url, " next url"
+        #return HttpResponseRedirect(url)
     return render_to_response('login.html', content, context_instance=RequestContext(req))
 
 
+@login_required
 def logout(req):
     auth.logout(req)
     return HttpResponseRedirect('/')
 
 
+@login_required
 def setpasswd(req):
     username = req.session.get('username', '')
     if username != '':
@@ -177,6 +209,7 @@ def add(req):
     return render_to_response('add.html', content, context_instance=RequestContext(req))
 
 
+@login_required
 def history(req):
     username = req.session.get('username', '')
     if username:
@@ -195,6 +228,7 @@ def history(req):
     return render_to_response("history.html",content)
 
 
+@login_required
 def order_list(req):
    # return home(req)
     username = req.session.get('username', '')
@@ -258,12 +292,56 @@ def view(req):
     return render_to_response('view.html', content, context_instance=RequestContext(req))
 
 
+@login_required
+def add_to_cart(req):
+    amount = req.GET.get("amount", -1)
+    instrument_id = req.GET.get("id", -1)
+    try:
+        instrument_id = int(instrument_id)
+    except :
+        instrument_id = -1
+    try:
+        amount = int(amount)
+    except :
+        amount = -1
+    if instrument_id < 0:
+        return HttpResponseRedirect('/view/')
+    if amount <= 0:
+        return HttpResponseRedirect('/view/?id='+str(instrument_id))
+    usr = MyUser.objects.get(user__username=req.user.username)
+    item = Cart.objects.get(user=usr, item_id__id=instrument_id)
+    instrument = Instruments.objects.get(pk=instrument_id)
+    if not item:
+        if instrument == '':
+            return HttpResponseRedirect('/view/')
+        Cart.objects.create(user=req.user,
+                            item=instrument,
+                            price=instrument.price*amount,
+                            weight=instrument.weight*amount,
+                            count=amount)
+    else:
+        amount += item.count
+        item.count = amount
+        item.weight = instrument.weight * amount
+        item.price = instrument.price * amount
+        item.save(force_update=True)
+
+    return HttpResponseRedirect('/view/')
+
+
+@login_required
+def delete_from_cart(req):
+
+    return HttpResponseRedirect("/cart/")
+
+
 def detail(req):
     username = req.session.get('username', '')
     if username != '':
         user = MyUser.objects.get(user__username=username)
     else:
         user = ''
+    # if user =='': # not login
     Id = req.GET.get('id', '')
     if Id == '':
         return HttpResponseRedirect('/view/')

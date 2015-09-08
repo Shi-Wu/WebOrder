@@ -202,7 +202,7 @@ hr.soften {
   right: 0;
   bottom: 0;
   left: 0;
-  background: url(../img/nav_background.jpg) repeat center center;
+  background: url(../img/nav_header_background.jpg) repeat center center;
   opacity: .4;
 }
 @media

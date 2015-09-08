@@ -9,6 +9,7 @@ class MyUser(models.Model):
     user = models.OneToOneField(User)
     nickname = models.CharField(max_length=16)
     permission = models.IntegerField()
+    # is_login = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.user.username+" "+self.nickname+" "+str(self.permission)

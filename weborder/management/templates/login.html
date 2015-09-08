@@ -15,6 +15,10 @@
 				<div class="well">
 					<h2 class="text-danger text-center">No Such User or Wrong Password!</h2>
 				</div>
+            {% elif status == 'login_at_other_place' %}
+                <div class="well">
+					<h2 class="text-danger text-center">You've Already Signed in at Other Place!</h2>
+				</div>
 			{% endif %}
 			<form method="POST" role="form" class="form-horizontal">
 				{% csrf_token %}
