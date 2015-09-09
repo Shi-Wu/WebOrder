@@ -9,6 +9,7 @@ class MyUser(models.Model):
     user = models.OneToOneField(User)
     nickname = models.CharField(max_length=16)
     permission = models.IntegerField()
+    login_id = models.IntegerField(default=0)
 
     def __unicode__(self):
         return self.user.username+" "+self.nickname+" "+str(self.permission)
@@ -22,6 +23,7 @@ class Instruments(models.Model):
     typ = models.CharField(max_length=128)  #
     desc = models.TextField(default="")
     weight = models.FloatField(default=0)
+    count = models.IntegerField(default=1)
 
     class META:
         ordering = ['name']
@@ -65,7 +67,8 @@ class OrderList(models.Model):
     transport = models.CharField(max_length=256)
 
     def __unicode__(self):
-        return str(self.id)+" "+self.user.nickname
+        return str(self.id)+" "+self.user.nickname + " $" + str(self.sum_price) + \
+            " " + str(self.weight)+"Kg "+self.address + " " + self.transport
 
 
 class OrderDetail(models.Model):
