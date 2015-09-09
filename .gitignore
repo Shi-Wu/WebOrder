@@ -55,7 +55,7 @@ target/
 # images
 *.jpg
 
-.db
+*.db
 
 
 
