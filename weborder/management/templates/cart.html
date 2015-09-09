@@ -29,23 +29,25 @@
 
                     <tbody>
                     {% for item in item_list %}
-                        <td><input type="checkbox" checked="1" value="{{ item.item_id.id}}" id="cart_check_box_{{forloop.counter}}" onclick="checkStateChanged('cart_check_box_{{forloop.counter}}')"></td>
-                        <td>{{ forloop.counter }}</td>
-                        <td><a href="{% url 'view_detail' %}?id={{item.item_id.id}}">{{ item.item_id.name }}</a></td>
-                        <td >
-                            <input type="number" min="0" max="{{ item.item_id.count }}"
-                                   id="show_count_id_{{forloop.counter}}" value="{{ item.count }}"
-                                     oninput="change_count('show_count_id_{{forloop.counter}}')">
-                        </td>
-                        <td id="show_weight_{{forloop.counter}}" weight="{{ item.item_id.weight }}">{{ item.weight }}</td>
-                        <td id="show_sum_price_{{forloop.counter}}" price="{{ item.item_id.price }}">{{ item.price|floatformat:2 }}</td>
-                        <td>
-                            <form class="form-inline" role="form" name="delete_item" method="get" action="{% url 'delete_from_cart' %}">
-                                <input type="hidden" value="{{ item.id }}" name ="cart_item_id">
-                                <input type="submit" value="Delete">
-                            </form>
-                            <!--span class="glyphicon glyphicon-remove"></span-->
-                        </td>
+                        <tr>
+                            <td><input type="checkbox" checked="1" value="{{ item.item_id.id}}" id="cart_check_box_{{forloop.counter}}" onclick="checkStateChanged('cart_check_box_{{forloop.counter}}')"></td>
+                            <td>{{ forloop.counter }}</td>
+                            <td><a href="{% url 'view_detail' %}?id={{item.item_id.id}}">{{ item.item_id.name }}</a></td>
+                            <td >
+                                <input type="number" min="0" max="{{ item.item_id.count }}"
+                                       id="show_count_id_{{forloop.counter}}" value="{{ item.count }}"
+                                       oninput="change_count('show_count_id_{{forloop.counter}}')">
+                            </td>
+                            <td id="show_weight_{{forloop.counter}}" weight="{{ item.item_id.weight }}">{{ item.weight }}</td>
+                            <td id="show_sum_price_{{forloop.counter}}" price="{{ item.item_id.price }}">{{ item.price|floatformat:2 }}</td>
+                            <td>
+                                <form class="form-inline" role="form" name="delete_item" method="get" action="{% url 'delete_from_cart' %}">
+                                    <input type="hidden" value="{{ item.id }}" name ="cart_item_id">
+                                    <input type="submit" value="Delete">
+                                </form>
+                                <!--span class="glyphicon glyphicon-remove"></span-->
+                            </td>
+                        </tr>
                     {% empty %}
                         <tr>
                             <td>No Instruments At Present</td>
@@ -68,15 +70,16 @@
                             <th>Submit</th>
                         </tr>
                         </thead>
-                        <form class="form-inline"  role="form" method="get"  action="/view/" >
+                        <form class="form-inline"  role="form" method="get"  action="/order/" >
+                            <input type="hidden" name="maxnum" value="{{ item_list.count }}">
                             {% for item in item_list %}
                                 <input type="hidden" value="{{ item.item_id.id}}" id="cart_itemid_id_{{forloop.counter}}" name="cart_itemid_name_{{forloop.counter}}">
                                 <input type="hidden" value="1" id="cart_amount_id_{{forloop.counter}}" name="cart_amount_name_{{forloop.counter}}">
                             {% endfor %}
                             <tbody>
                             <td id="sum_count">{{ sum_count}}</td>
-                            <td id="sum_weight">{{ sum_weight}}</td>
-                            <td id="sum_price">{{ sum_price}}</td>
+                            <td id="sum_weight">{{ sum_weight|floatformat:2}}</td>
+                            <td id="sum_price">{{ sum_price|floatformat:2}}</td>
 
                             <td><input type="text" id="submit_address" required name="address"> </td>
                             <td>
@@ -174,7 +177,6 @@
                 }
                 function chooseAll()
                 {
-                    //alert("chooseAll")
                     var val=document.getElementById("checkbox_choose_all").checked;
                     var cnt=1;
                     while(true)

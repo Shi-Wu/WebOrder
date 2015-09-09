@@ -53,7 +53,7 @@ ROOT_URLCONF = 'weborder.urls'
 
 WSGI_APPLICATION = 'weborder.wsgi.application'
 
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+# SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 

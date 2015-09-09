@@ -7,7 +7,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2 well">
-			{% if cart_count == 0 %}
+			{% if order_items.count == 0 %}
                 <h2><p> Sorry,Your Cart Is Empty!</p></h2>
             {% else %}
                 <table class="table table-hover">
@@ -37,7 +37,6 @@
                     </tbody>
                 </table>
             {% endif %}
-            <h3 class="text-center">Email:<span  class="text-info">isdf sdf sfsmkean@163.com</span></h3>
         </div>
     </div>
 </div>

@@ -67,7 +67,8 @@ class OrderList(models.Model):
     transport = models.CharField(max_length=256)
 
     def __unicode__(self):
-        return str(self.id)+" "+self.user.nickname
+        return str(self.id)+" "+self.user.nickname + " $" + str(self.sum_price) + \
+            " " + str(self.weight)+"Kg "+self.address + " " + self.transport
 
 
 class OrderDetail(models.Model):
