@@ -8,7 +8,7 @@
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2 well">
 			{% if order_items.count == 0 %}
-                <h2><p> Sorry,Your Cart Is Empty!</p></h2>
+                <h2><p> Sorry,This Order Is Empty!</p></h2>
             {% else %}
                 <table class="table table-hover">
                     <thead>
@@ -30,9 +30,7 @@
                             <td>{{ item.price|floatformat:2 }}</td>
                         </tr>
                     {% empty %}
-                        <tr>
-                            <td>No Instruments At Present</td>
-                        </tr>
+                            <h3>No Order List Item At Present</h3>
                     {% endfor %}
                     </tbody>
                 </table>

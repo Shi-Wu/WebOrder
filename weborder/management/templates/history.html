@@ -32,23 +32,19 @@
 							<td>{{ order.address}}</td>
 							<td>{{ order.transport}}</td>
 						</tr>
-						{% empty %}
-						<tr>
-							<td>No Instruments At Present</td>
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-
-
-
+                        {% endfor %}
+                    </tbody>
+            </table>
+            {% if order_list.count == 0 %}
+                <h3>No Order List at Present!</h3>
+            {% endif %}
             <br/> <br/> <hr/>
-			<h4 class="text-center">Email:<span  class="text-info">imkean@163.com</span></h4>
+            <h4 class="text-center">Email:<span  class="text-info">imkean@163.com</span></h4>
             <p class="text-center">
                 This Is A Course-Design Project of Software Engineer of Jilin University
             </p>
         </div>
-	</div>
+    </div>
 </div>
 
 {% endblock %}

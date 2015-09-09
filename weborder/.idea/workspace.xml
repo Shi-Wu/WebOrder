@@ -3,16 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="936d9ff1-4b24-4dc2-8562-8b29a35b71e9" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/management.db" afterPath="$PROJECT_DIR$/management.db" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/management/templates/cart.html" afterPath="$PROJECT_DIR$/management/templates/cart.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/management/templates/detail.html" afterPath="$PROJECT_DIR$/management/templates/detail.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/management/templates/history.html" afterPath="$PROJECT_DIR$/management/templates/history.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/management/templates/login.html" afterPath="$PROJECT_DIR$/management/templates/login.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/management/models.py" afterPath="$PROJECT_DIR$/management/models.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/management/templates/orderlist.html" afterPath="$PROJECT_DIR$/management/templates/orderlist.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/weborder/settings.py" afterPath="$PROJECT_DIR$/weborder/settings.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/weborder/urls.py" afterPath="$PROJECT_DIR$/weborder/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/management/views.py" afterPath="$PROJECT_DIR$/management/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="weborder.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -80,8 +72,8 @@
       <file leaf-file-name="orderlist.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/management/templates/orderlist.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.5384617">
-              <caret line="10" column="58" selection-start-line="10" selection-start-column="58" selection-end-line="10" selection-end-column="58" />
+            <state vertical-scroll-proportion="-14.384615">
+              <caret line="32" column="50" selection-start-line="32" selection-start-column="50" selection-end-line="32" selection-end-column="50" />
               <folding />
             </state>
           </provider>
@@ -97,11 +89,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/management/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7802908">
-              <caret line="410" column="36" selection-start-line="410" selection-start-column="36" selection-end-line="410" selection-end-column="36" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="393" column="17" selection-start-line="393" selection-start-column="17" selection-end-line="393" selection-end-column="17" />
               <folding>
                 <element signature="e#16#73#0" expanded="true" />
                 <element signature="e#525#670#0" expanded="false" />
@@ -121,11 +113,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="history.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="history.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/management/templates/history.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.0">
-              <caret line="18" column="46" selection-start-line="18" selection-start-column="46" selection-end-line="18" selection-end-column="46" />
+            <state vertical-scroll-proportion="0.6559865">
+              <caret line="39" column="23" selection-start-line="39" selection-start-column="23" selection-end-line="39" selection-end-column="23" />
               <folding />
             </state>
           </provider>
@@ -162,11 +154,11 @@
         <option value="$PROJECT_DIR$/weborder/urls.py" />
         <option value="$PROJECT_DIR$/management/templates/login.html" />
         <option value="$PROJECT_DIR$/management/templates/cart.html" />
-        <option value="$PROJECT_DIR$/management/templates/history.html" />
         <option value="$PROJECT_DIR$/management/models.py" />
         <option value="$PROJECT_DIR$/weborder/settings.py" />
-        <option value="$PROJECT_DIR$/management/templates/orderlist.html" />
         <option value="$PROJECT_DIR$/management/views.py" />
+        <option value="$PROJECT_DIR$/management/templates/orderlist.html" />
+        <option value="$PROJECT_DIR$/management/templates/history.html" />
       </list>
     </option>
   </component>
@@ -996,14 +988,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/management/templates/history.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.0">
-          <caret line="18" column="46" selection-start-line="18" selection-start-column="46" selection-end-line="18" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/management/templates/detail.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-8.769231">
@@ -1016,14 +1000,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="45" column="62" selection-start-line="45" selection-start-column="62" selection-end-line="45" selection-end-column="62" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/management/templates/orderlist.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.5384617">
-          <caret line="10" column="58" selection-start-line="10" selection-start-column="58" selection-end-line="10" selection-end-column="58" />
           <folding />
         </state>
       </provider>
@@ -1054,8 +1030,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/management/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7802908">
-          <caret line="410" column="36" selection-start-line="410" selection-start-column="36" selection-end-line="410" selection-end-column="36" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="393" column="17" selection-start-line="393" selection-start-column="17" selection-end-line="393" selection-end-column="17" />
           <folding>
             <element signature="e#16#73#0" expanded="true" />
             <element signature="e#525#670#0" expanded="false" />
@@ -1071,6 +1047,22 @@
             <element signature="e#7133#7614#0" expanded="false" />
             <element signature="e#13933#14661#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/management/templates/orderlist.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-14.384615">
+          <caret line="32" column="50" selection-start-line="32" selection-start-column="50" selection-end-line="32" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/management/templates/history.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6559865">
+          <caret line="39" column="23" selection-start-line="39" selection-start-column="23" selection-end-line="39" selection-end-column="23" />
+          <folding />
         </state>
       </provider>
     </entry>
