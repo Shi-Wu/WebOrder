@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from django.contrib import auth
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from models import *
+from management.view_class.user_view import *
 
 
 def get_type_list():
@@ -79,7 +80,8 @@ def about(req):
 def index(req):
     username = req.session.get('username', '')
     if username:
-        user = MyUser.objects.get(user__username=username)
+        user = UserView.get_user(username)
+        # user = MyUser.objects.get(user__username=username)
     else:
         user = ''
     cart_count = get_cart_count(user)
