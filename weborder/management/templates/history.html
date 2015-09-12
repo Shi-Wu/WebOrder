@@ -1,3 +1,4 @@
+#coding:utf-8
 {% extends "base.html" %}
 {% load staticfiles %}
 {% block title %}History Lists{% endblock %}
@@ -7,17 +8,17 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2 well">
-			<h2>&emsp;History Order Lists.</h2>
+			<h2 class="text-center">History Order Lists</h2>
 
             <table class="table table-hover  table-bordered">
 					<thead>
 						<tr>
 							<th>No.</th>
                             <th>Order ID</th>
-							<th>price</th>
-							<th>weight</th>
+							<th>Price($)</th>
+							<th>weight(Kg)</th>
 							<th>Date Time</th>
-							<th>address</th>
+							<th>Address</th>
                             <th>Transport</th>
 						</tr>
 					</thead>
@@ -26,9 +27,9 @@
 						<tr>
 							<td>{{ forloop.counter }}</td>
 							<td><a href="{% url 'order_list' %}?order_id={{order.id}}">{{ order.id }}</a></td>
-							<td>${{ order.sum_price|floatformat:4 }}</td>
-							<td>{{ order.weight|floatformat:4}}kg</td>
-							<td>{{ order.date }}</td>
+							<td>{{ order.sum_price|floatformat:2 }}</td>
+							<td>{{ order.weight|floatformat:2}}</td>
+							<td>{{ order.date |date:"Y/m/d/H:i:s"}}</td>
 							<td>{{ order.address}}</td>
 							<td>{{ order.transport}}</td>
 						</tr>

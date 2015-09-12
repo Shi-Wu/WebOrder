@@ -233,7 +233,7 @@ def history(req):
     print usr.user_id
     order_list = OrderList.objects.filter(user=usr)
 
-    content = {'active_menu': 'user_menu',
+    content = {'active_menu': 'history',
                'user': usr,
                'cart_count': get_cart_count(usr),
                'order_list': order_list,
@@ -252,14 +252,20 @@ def order_list(req):
     order_id = req.GET.get('order_id', '')
     if order_id == '':
         return HttpResponseRedirect('/history/')
+    have_order = False
+    if OrderList.objects.filter(pk=order_id).exists():
+        have_order = True
+        order_info = OrderList.objects.get(pk=order_id)
     try:
         order_items = OrderDetail.objects.filter(order_id__id=order_id)
-        print order_items.count(),"order items count"
+        # print order_items.count(), "order items count"
     except:
         return HttpResponseRedirect('/history/')
     content = {'user': user,
                'active_menu': 'user_menu',
                'order_items': order_items,
+               'order_info': order_info,
+               'have_order': have_order,
                'cart_count': get_cart_count(user),
                }
     return render_to_response('orderlist.html', content)
