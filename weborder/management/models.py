@@ -1,7 +1,7 @@
 # coding :utf-8
 
 from django.db import models
-from django.db import connection
+# from django.db import connection
 from django.contrib.auth.models import User
 
 
@@ -11,11 +11,31 @@ class MyUser(models.Model):
     permission = models.IntegerField()
     login_id = models.IntegerField(default=0)
 
+    @staticmethod
+    def get_user(username):
+        if username:
+            try:
+                user = MyUser.objects.get(user__username=username)
+            except MyUser.DoesNotExist:
+                user = ''
+        else:
+            user = ''
+        return user
+
+    @staticmethod
+    def user_logout(username):
+        user = MyUser.get_user(username)
+        if user:
+            return user.user.is_authenticated()
+        else:
+            return False
+
     def __unicode__(self):
         return self.user.username+" "+self.nickname+" "+str(self.permission)
 
 
 class Instruments(models.Model):
+
     name = models.CharField(max_length=128)
     price = models.FloatField(default=0.0)
     author = models.CharField(max_length=128)  # brand
@@ -24,6 +44,20 @@ class Instruments(models.Model):
     desc = models.TextField(default="")
     weight = models.FloatField(default=0)
     count = models.IntegerField(default=1)
+
+    @staticmethod
+    def get_type_list():
+        book_list = Instruments.objects.all()
+        type_list = set()
+        for book in book_list:
+            type_list.add(book.typ)
+        return list(type_list)
+
+    @staticmethod
+    def check_item_id(item_id, item_count):
+        if item_count > 0 and Instruments.objects.filter(pk=item_id).exists():
+            return item_count <= Instruments.objects.get(pk=item_id).count
+        return False
 
     class META:
         ordering = ['name']
@@ -91,6 +125,13 @@ class Cart(models.Model):
     count = models.IntegerField()
     price = models.FloatField()
     weight = models.FloatField()
+
+    @staticmethod
+    def get_cart_count(usr):
+        if usr:
+            return Cart.objects.filter(user=usr).count()
+        else:
+            return 0
 
     def __unicode__(self):
         return str(self.item_id)+" "+self.user.nickname
