@@ -10,31 +10,13 @@ from django.contrib.auth.models import User
 from django.contrib import auth
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from models import *
-from management.view_class.user_view import *
-
-
-def get_type_list():
-    book_list = Instruments.objects.all()
-    type_list = set()
-    for book in book_list:
-        type_list.add(book.typ)
-    return list(type_list)
-
-
-def get_cart_count(usr):
-    if usr:
-        return Cart.objects.filter(user=usr).count()
-    else:
-        return 0
 
 
 @login_required
 def cart(req):
-    username = req.session.get('username', '')
-    if username:
-        user = MyUser.objects.get(user__username=username)
-    else:
-        return HttpResponseRedirect("/login/")
+    user = MyUser.get_user(req.session.get('username', ''))
+    if user == '':
+        return login(req)
     item_list = Cart.objects.filter(user=user)
     sum_price, sum_weight, sum_count = 0, 0, 0
     if item_list.exists():
@@ -44,7 +26,7 @@ def cart(req):
             sum_count += item.count
     content = {'active_menu': 'cart',
                'user': user,
-               'cart_count': get_cart_count(user),
+               'cart_count': Cart.get_cart_count(user),
                'item_list': item_list,
                'sum_price': sum_price,
                'sum_weight': sum_weight,
@@ -55,40 +37,28 @@ def cart(req):
 
 
 def home(req):
-    username = req.session.get('username', '')
-    if username:
-        user = MyUser.objects.get(user__username=username)
-    else:
-        user = ''
-    content = dict(active_menu='homepage', user=user, img_list=HomeImg.objects.all(), cart_count=get_cart_count(user))
+    user = MyUser.get_user(req.session.get('username', ''))
+    content = dict(active_menu='homepage',
+                   user=user, img_list=HomeImg.objects.all(),
+                   cart_count=Cart.get_cart_count(user))
     return render_to_response("home.html", content)
 
 
 def about(req):
-    username = req.session.get('username', '')
-    if username:
-        user = MyUser.objects.get(user__username=username)
-    else:
-        user = ''
+    user = MyUser.get_user(req.session.get('username', ''))
     content = {'active_menu': 'about',
                'user': user,
-               'cart_count': get_cart_count(user),
+               'cart_count': Cart.get_cart_count(user),
                }
     return render_to_response("about.html", content)
 
 
 def index(req):
-    username = req.session.get('username', '')
-    if username:
-        user = UserView.get_user(username)
-        # user = MyUser.objects.get(user__username=username)
-    else:
-        user = ''
-    cart_count = get_cart_count(user)
+    user = MyUser.get_user(req.session.get('username', ''))
     content = {'active_menu': 'homepage',
                'user': user,
                'img_list': HomeImg.objects.all(),
-               'cart_count': cart_count,
+               'cart_count': Cart.get_cart_count(user),
                }
     return render_to_response('index.html', content)
 
@@ -121,26 +91,20 @@ def is_already_login(username):  # 防止重复登录
     try:
         user = MyUser.objects.get(user__username=username)
         if user:
-            print user.user.is_authenticated(), username, user.user.username
             return False
-            return user.user.is_authenticated()
+            return not user.user.is_authenticated()
         else:
             return False
-    except:
-        return False
-
-
-def user_logout(username):
-    user = MyUser.objects.get(username=username)
-    if user.user.is_authenticated():
-        return True
-    else:
+    except MyUser.DoesNotExist:
         return False
 
 
 def login(req):
+    print 'login'
     if req.session.get('username', ''):
         return HttpResponseRedirect('/')
+    next_page = req.GET.get('next', '')
+    print next_page
     status = ''
     if req.POST:
         post = req.POST
@@ -154,16 +118,15 @@ def login(req):
                 if user.is_active:
                     auth.login(req, user)
                     req.session['username'] = username
-                    return HttpResponseRedirect('/')
+                    if next_page:
+                        # return view(req)
+                        return HttpResponseRedirect(next_page)
+                    return HttpResponseRedirect('/view/')
                 else:
                     status = 'not_active'
             else:
                 status = 'not_exist_or_passwd_err'
     content = {'active_menu': 'homepage', 'status': status, 'user': ''}
-    if req.GET:
-        url = req.GET.get("next", "/")
-        print url, " next url"
-        # return HttpResponseRedirect(url)
     return render_to_response('login.html', content, context_instance=RequestContext(req))
 
 
@@ -174,11 +137,9 @@ def logout(req):
 
 
 @login_required
-def setpasswd(req):
-    username = req.session.get('username', '')
-    if username != '':
-        user = MyUser.objects.get(user__username=username)
-    else:
+def setpassword(req):
+    user = MyUser.get_user(req.session.get('username', ''))
+    if user == '':
         return HttpResponseRedirect('/login/')
     status = ''
     if req.POST:
@@ -195,7 +156,7 @@ def setpasswd(req):
     content = {'user': user,
                'active_menu': 'user_menu',
                'status': status,
-               'cart_count': get_cart_count(user),
+               'cart_count': Cart.get_cart_count(user),
                }
     return render_to_response('setpasswd.html', content, context_instance=RequestContext(req))
 
@@ -226,60 +187,52 @@ def add(req):
 
 @login_required
 def history(req):
-    username = req.session.get('username', '')
-    if username:
-        usr = MyUser.objects.get(user__username=username)
-    else:
-        return index(req)
-    print username
-    print usr.user_id
-    order_list = OrderList.objects.filter(user=usr)
-
+    usr = MyUser.get_user(req.session.get('username', ''))
+    if usr == '':
+        return login(req)
+    order_lists = OrderList.objects.filter(user=usr)
     content = {'active_menu': 'history',
                'user': usr,
-               'cart_count': get_cart_count(usr),
-               'order_list': order_list,
+               'cart_count': Cart.get_cart_count(usr),
+               'order_list': order_lists,
                }
     return render_to_response("history.html", content)
 
 
 @login_required
 def order_list(req):
-    # return home(req)
-    username = req.session.get('username', '')
-    if username != '':
-        user = MyUser.objects.get(user__username=username)
-    else:
-        return index(req)
+    user = MyUser.get_user(req.session.get('username', ''))
+    if user == '':
+        return login(req)
     order_id = req.GET.get('order_id', '')
     if order_id == '':
         return HttpResponseRedirect('/history/')
     have_order = False
+    order_info = ''
     if OrderList.objects.filter(pk=order_id).exists():
         have_order = True
         order_info = OrderList.objects.get(pk=order_id)
     try:
         order_items = OrderDetail.objects.filter(order_id__id=order_id)
-        # print order_items.count(), "order items count"
-    except:
-        return HttpResponseRedirect('/history/')
+    except OrderDetail.DoesNotExist:
+        return history(req)
+        # return HttpResponseRedirect('/history/')
     content = {'user': user,
                'active_menu': 'user_menu',
                'order_items': order_items,
                'order_info': order_info,
                'have_order': have_order,
-               'cart_count': get_cart_count(user),
+               'cart_count': Cart.get_cart_count(user),
                }
     return render_to_response('orderlist.html', content)
 
 
+@login_required
 def view(req):
-    username = req.session.get('username', '')
-    if username != '':
-        user = MyUser.objects.get(user__username=username)
-    else:
-        return HttpResponseRedirect("/login/")
-    type_list = get_type_list()
+    user = MyUser.get_user(req.session.get('username', ''))
+    if user == '':
+        return login(req)
+    type_list = Instruments.get_type_list()
     book_type = req.GET.get('type', 'all')
     if book_type == '':
         book_lst = Instruments.objects.all()
@@ -309,23 +262,15 @@ def view(req):
                'type_list': type_list,
                'book_type': book_type,
                'book_list': book_list,
-               'cart_count': get_cart_count(user),
+               'cart_count': Cart.get_cart_count(user),
                }
     return render_to_response('view.html', content, context_instance=RequestContext(req))
 
 
-def check_item_id(item_id, item_count):
-    if item_count > 0 and Instruments.objects.filter(pk=item_id).exists():
-        return item_count < Instruments.objects.get(pk=item_id)
-    return False
-
-
 @login_required
 def order(req):
-    username = req.session.get('username', '')
-    if username:
-        usr = MyUser.objects.get(user__username=username)
-    else:
+    usr = MyUser.get_user(req.session.get('username', ''))
+    if usr == '':
         return HttpResponseRedirect("/login/")
     maxnum = int(req.GET.get("maxnum", 0))
     address = req.GET.get("address", "no place")
@@ -335,7 +280,7 @@ def order(req):
     for i in range(1, maxnum + 1):
         cart_item_id = int(req.GET.get("cart_itemid_name_" + str(i), -1))
         cart_item_amount = int(req.GET.get("cart_amount_name_" + str(i), -1))
-        if cart_item_id != -1 and check_item_id(cart_item_id, cart_item_amount):
+        if cart_item_id != -1 and Instruments.check_item_id(cart_item_id, cart_item_amount):
             order_data.append((cart_item_id, cart_item_amount))
     order_num = len(order_data)
     if order_num > 0:
@@ -368,7 +313,7 @@ def order(req):
         content = {'user': usr,
                    'active_menu': 'user_menu',
                    'order_items': OrderDetail.objects.filter(order_id=new_order),
-                   'cart_count': get_cart_count(usr),
+                   'cart_count': Cart.get_cart_count(usr),
                    }
         return render_to_response('orderlist.html', content)
     return HttpResponseRedirect("/history/")
@@ -376,31 +321,27 @@ def order(req):
 
 @login_required
 def add_to_cart(req):
-    username = req.session.get('username', '')
-    if username:
-        usr = MyUser.objects.get(user__username=username)
-    else:
-        return HttpResponseRedirect("/login/")
+    usr = MyUser.get_user(req.session.get('username', ''))
+    if usr == '':
+        return login(req)
     amount = req.GET.get("amount", -1)
     instrument_id = req.GET.get("id", -1)
     try:
         instrument_id = int(instrument_id)
-    except:
+    except ValueError:
         instrument_id = -1
     try:
         amount = int(amount)
-    except:
+    except ValueError:
         amount = -1
     if instrument_id < 0:
         return HttpResponseRedirect('/view/')
     if amount <= 0:
         return HttpResponseRedirect('/view/?id=' + str(instrument_id))
-
     try:
         item = Cart.objects.get(user=usr, item_id__id=instrument_id)
-    except:
+    except Cart.DoesNotExist:
         item = ''
-
     instrument = Instruments.objects.get(pk=instrument_id)
     print instrument
     if item == '':
@@ -422,11 +363,9 @@ def add_to_cart(req):
 
 @login_required
 def delete_from_cart(req):
-    username = req.session.get('username', '')
-    if username:
-        user = MyUser.objects.get(user__username=username)
-    else:
-        return HttpResponseRedirect("/login/")
+    user = MyUser.get_user(req.session.get('username', ''))
+    if user == '':
+        return login(req)
     del_item_id = req.GET.get("cart_item_id", '')
     print del_item_id
     if del_item_id == ' ':
@@ -437,24 +376,21 @@ def delete_from_cart(req):
 
 
 def detail(req):
-    username = req.session.get('username', '')
-    if username != '':
-        user = MyUser.objects.get(user__username=username)
-    else:
-        user = ''
-    # if user =='': # not login
+    user = MyUser.get_user(req.session.get('username', ''))
+    if user == '':
+        return login(req)
     item_id = req.GET.get('id', '')
     if item_id == '':
         return HttpResponseRedirect('/view/')
     try:
         instrument = Instruments.objects.get(pk=item_id)
-    except:
+    except Instruments.DoesNotExist:
         return HttpResponseRedirect('/view/')
     img_list = Img.objects.filter(item=instrument)
     content = {'user': user,
                'active_menu': 'viewpage',
                'book': instrument,
                'img_list': img_list,
-               'cart_count': get_cart_count(user),
+               'cart_count': Cart.get_cart_count(user),
                }
     return render_to_response('detail.html', content)
