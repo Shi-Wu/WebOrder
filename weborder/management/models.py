@@ -30,6 +30,18 @@ class MyUser(models.Model):
         else:
             return False
 
+    @staticmethod
+    def is_already_login(username):
+        try:
+            user = MyUser.objects.get(user__username=username)
+            if user:
+                return False
+                # return not user.user.is_authenticated()
+            else:
+                return False
+        except MyUser.DoesNotExist:
+            return False
+
     def __unicode__(self):
         return self.user.username+" "+self.nickname+" "+str(self.permission)
 
@@ -125,6 +137,13 @@ class Cart(models.Model):
     count = models.IntegerField()
     price = models.FloatField()
     weight = models.FloatField()
+
+    @staticmethod
+    def init_user_cart(user):
+        if user == '':
+            return False
+        else:
+            Cart.objects.filter(user=user).delete()
 
     @staticmethod
     def get_cart_count(usr):

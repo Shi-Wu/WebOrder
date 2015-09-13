@@ -4,36 +4,12 @@ from django.shortcuts import render, render_to_response
 from django.template import Context, RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from datetime import datetime
-from django.http import Http404
-from django import forms
-from django.contrib.auth.models import User
+# from django.http import Http404
+# from django import forms
+# from django.contrib.auth.models import User
 from django.contrib import auth
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from models import *
-
-
-@login_required
-def cart(req):
-    user = MyUser.get_user(req.session.get('username', ''))
-    if user == '':
-        return login(req)
-    item_list = Cart.objects.filter(user=user)
-    sum_price, sum_weight, sum_count = 0, 0, 0
-    if item_list.exists():
-        for item in item_list:
-            sum_price += item.item_id.price * item.count
-            sum_weight += item.item_id.weight * item.count
-            sum_count += item.count
-    content = {'active_menu': 'cart',
-               'user': user,
-               'cart_count': Cart.get_cart_count(user),
-               'item_list': item_list,
-               'sum_price': sum_price,
-               'sum_weight': sum_weight,
-               'sum_count': sum_count,
-               }
-
-    return render_to_response("cart.html", content)
 
 
 def home(req):
@@ -87,45 +63,31 @@ def signup(req):
     return render_to_response('signup.html', content, context_instance=RequestContext(req))
 
 
-def is_already_login(username):  # 防止重复登录
-    try:
-        user = MyUser.objects.get(user__username=username)
-        if user:
-            return False
-            return not user.user.is_authenticated()
-        else:
-            return False
-    except MyUser.DoesNotExist:
-        return False
-
-
 def login(req):
-    print 'login'
     if req.session.get('username', ''):
         return HttpResponseRedirect('/')
     next_page = req.GET.get('next', '')
-    print next_page
     status = ''
     if req.POST:
         post = req.POST
         username = post.get('username', '')
-        if is_already_login(username):
+        if MyUser.is_already_login(username):
             status = 'login_at_other_place'
         else:
-            password = post.get('passwd', '')
+            password = post.get('password', '')
             user = auth.authenticate(username=username, password=password)
             if user is not None:
                 if user.is_active:
                     auth.login(req, user)
                     req.session['username'] = username
+                    Cart.init_user_cart(MyUser.get_user(username))
                     if next_page:
-                        # return view(req)
                         return HttpResponseRedirect(next_page)
                     return HttpResponseRedirect('/view/')
                 else:
                     status = 'not_active'
             else:
-                status = 'not_exist_or_passwd_err'
+                status = 'not_exist_or_password_err'
     content = {'active_menu': 'homepage', 'status': status, 'user': ''}
     return render_to_response('login.html', content, context_instance=RequestContext(req))
 
@@ -161,6 +123,7 @@ def setpassword(req):
     return render_to_response('setpasswd.html', content, context_instance=RequestContext(req))
 
 
+@login_required
 def add(req):
     username = req.session.get('username', '')
     if username != '':
@@ -172,16 +135,16 @@ def add(req):
     status = ''
     if req.POST:
         post = req.POST
-        newbook = Instruments(
+        new_item = Instruments(
             name=post.get('name', ''),
             author=post.get('author', ''),
             typ=post.get('typ', ''),
             price=post.get('price', ''),
             pubDate=post.get('pubdate', ''),
         )
-        newbook.save()
+        new_item.save()
         status = 'success'
-    content = {'user': user, 'active_menu': 'addbook', 'status': status}
+    content = {'user': user, 'active_menu': 'add', 'status': status}
     return render_to_response('add.html', content, context_instance=RequestContext(req))
 
 
@@ -317,6 +280,30 @@ def order(req):
                    }
         return render_to_response('orderlist.html', content)
     return HttpResponseRedirect("/history/")
+
+
+@login_required
+def cart(req):
+    user = MyUser.get_user(req.session.get('username', ''))
+    if user == '':
+        return login(req)
+    item_list = Cart.objects.filter(user=user)
+    sum_price, sum_weight, sum_count = 0, 0, 0
+    if item_list.exists():
+        for item in item_list:
+            sum_price += item.item_id.price * item.count
+            sum_weight += item.item_id.weight * item.count
+            sum_count += item.count
+    content = {'active_menu': 'cart',
+               'user': user,
+               'cart_count': Cart.get_cart_count(user),
+               'item_list': item_list,
+               'sum_price': sum_price,
+               'sum_weight': sum_weight,
+               'sum_count': sum_count,
+               }
+
+    return render_to_response("cart.html", content)
 
 
 @login_required

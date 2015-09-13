@@ -4,10 +4,6 @@ from django.conf import settings
 from management import views
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'LM.views.home', name='home'),
-    # url(r'^blog/', include('blog.urls')),
-
     url(r'^admin/', include(admin.site.urls)),
     url(r'^home/', views.home, name='home'),
     url(r'^cart/', views.cart, name='cart'),
