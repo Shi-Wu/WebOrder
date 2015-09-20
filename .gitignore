@@ -39,7 +39,6 @@ htmlcov/
 nosetests.xml
 coverage.xml
 workspace.xml
-
 # Translations
 *.mo
 *.pot
