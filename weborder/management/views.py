@@ -238,7 +238,16 @@ def order(req):
     maxnum = int(req.GET.get("maxnum", 0))
     address = req.GET.get("address", "no place")
     transport = req.GET.get("transport", "no way")
-    print maxnum, ' maxnum'
+    if address == 'no place' or len(address) < 2 or transport == 'no way' \
+            or (transport != 'Air' and transport != 'Ground'):
+        content = {
+            'user': usr,
+            'cart_count': Cart.get_cart_count(usr),
+            'info_state': 'set_text',
+            'text': 'Order Arguments Error',
+        }
+        return render_to_response("infos.html",content)
+
     order_data = []
     for i in range(1, maxnum + 1):
         cart_item_id = int(req.GET.get("cart_itemid_name_" + str(i), -1))
@@ -345,7 +354,22 @@ def add_to_cart(req):
         item.weight = instrument.weight * amount
         item.price = instrument.price * amount
         item.save(force_update=True)
-    return HttpResponseRedirect('/view/')
+    content = {'info_state': 'add_to_cart',
+               'user': usr,
+               'cart_count': Cart.get_cart_count(usr),
+               }
+    return render_to_response("infos.html", content)
+
+
+@login_required
+def clear_cart(req):
+    user = MyUser.get_user(req.session.get('username', ''))
+    Cart.init_user_cart(user)
+    content ={'info_state': 'clear_cart',
+              'user': user,
+              'cart_count': Cart.get_cart_count(user),
+              }
+    return render_to_response("infos.html", content)
 
 
 @login_required
