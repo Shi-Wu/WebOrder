@@ -82,14 +82,14 @@
                             <input type="hidden" name="maxnum" value="{{ item_list.count }}">
                             {% for item in item_list %}
                                 <input type="hidden" value="{{ item.item_id.id}}" id="cart_itemid_id_{{forloop.counter}}" name="cart_itemid_name_{{forloop.counter}}">
-                                <input type="hidden" value="1" id="cart_amount_id_{{forloop.counter}}" name="cart_amount_name_{{forloop.counter}}">
+                                <input type="hidden" value={{ item.count  }} id="cart_amount_id_{{forloop.counter}}" name="cart_amount_name_{{forloop.counter}}">
                             {% endfor %}
                             <tbody>
                             <td id="sum_count">{{ sum_count}}</td>
                             <td id="sum_weight">{{ sum_weight|floatformat:2}}</td>
                             <td id="sum_price">{{ sum_price|floatformat:2}}</td>
 
-                            <td><input type="text" id="submit_address" required name="address"  onsubmit="return check_submit()"> </td>
+                            <td><input type="text" id="submit_address" required name="address"  > </td>
                             <td>
                                 <div class="form-group">
                                     <select class="form-control" name="transport">
@@ -99,7 +99,7 @@
                                 </div>
                             </td>
                             <td>
-                                <input class="btn btn-success" type="submit" value="Submit Order" >
+                                <input class="btn btn-success" type="submit" value="Submit Order"  onsubmit="return check_submit()">
                             </td>
 
                             </tbody>
@@ -129,20 +129,25 @@
                 }
                 function change_count(by_who)
                 {
+                    aler("amount changed")
                     var idx=getStringNum(by_who);
 
                     var cnt=document.getElementById(by_who).value/1;
                     if(cnt < 1 )
                     {
                         document.getElementById("cart_check_box_"+idx.toString()).checked=false;
+
                     }
                     var weight=document.getElementById("show_weight_"+idx.toString()).getAttribute("weight")/1.0;
                     //alert(weight);
                     document.getElementById("show_weight_"+idx.toString()).innerHTML= (weight * cnt).toFixed(2);
                     var price=document.getElementById("show_sum_price_"+idx.toString()).getAttribute("price")/1;
                     document.getElementById("show_sum_price_"+idx.toString()).innerHTML=(price * cnt).toFixed(2);
+
+                    document.getElementById("cart_amount_id_"+idx.toString()).value=cnt;
+
+                   /// alert( 'Count '+ document.getElementById('cart_amount_id_1').value);
                     compute_summary();
-                    //alert("change_count"+idx.toString());
                 }
 
                 function checkStateChanged(by_who)
