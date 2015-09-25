@@ -257,7 +257,7 @@ def order(req):
                 break
             order_data.append((cart_item_id, cart_item_amount))
     order_num = len(order_data)
-    if order_num > 0:
+    if order_num > 0 and not arg_error:
         new_order = OrderList.objects.create(
             user=usr,
             sum_price=0,
@@ -285,6 +285,7 @@ def order(req):
             except Cart.DoseNotExist:
                 arg_error = True
                 text += '  The Item in Cart Dose Not Exist!'
+                new_order.delelte()
                 break
         if not arg_error:
             new_order.sum_price = sum_price
@@ -299,7 +300,7 @@ def order(req):
                        'order_info': new_order,
                        }
             return render_to_response('orderlist.html', content)
-    else:
+    elif order_num <= 0:
         arg_error = True
         text += ' Error: You Don\'t Choose Anything!'
     if arg_error:

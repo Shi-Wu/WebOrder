@@ -58,6 +58,6 @@ target/
 # Database
 *.db
 .DS_Store
-management.db
+weborder/management.db
 # PyCharm
 .idea/
