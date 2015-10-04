@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title %}About{% endblock %}
+
+{% block content %}
+
+<div class="container">
+	<div class="row">
+			{% if info_state == 'clear_cart' %}
+                <h2 class="text-center"> Successfully Empty the Cart!</h2>
+                <br/>
+                <div class="col-xs-5" style = "text-align:right;" >
+                     <form class="form-inline" role="form" method="get" action="{% url 'index' %}">
+                        <input class="btn btn-success " type="submit" value="Go to Homepage" >
+                    </form>
+                </div>
+                <div class="col-xs-2" >
+                </div>
+                <div class="col-xs-5" style = "text-align:left;">
+                    <form class="form-inline" role="form" method="get" action="{% url 'view_instrument' %}">
+                        <input class="btn btn-success" type="submit" value="Browse Catalog" >
+                    </form>
+                </div>
+            {% elif info_state == 'add_to_cart' %}
+                 <h2 class="text-center"> Successfully Add to Cart!</h2>
+                <br/>
+                <div class="col-xs-5" style = "text-align:right;" >
+                     <form class="form-inline" role="form" method="get" action="{% url 'cart' %}">
+                        <input class="btn btn-success " type="submit" value="Go to My Cart" >
+                    </form>
+                </div>
+                <div class="col-xs-2" >
+                </div>
+                <div class="col-xs-5" style = "text-align:left;">
+                    <form class="form-inline" role="form" method="get" action="{% url 'view_instrument' %}">
+                        <input class="btn btn-success" type="submit" value="Browse Catalog" >
+                    </form>
+                </div>
+            {% elif info_state == 'set_text' %}
+                <h2 class="text-center">{{ text }}</h2>
+            {% elif info_state == 'login_success' %}
+
+                <h2 class="text-center"> Sign in Successfully! Welcome to Web Order The Best Website of Order Web!</h2>
+
+            {% endif %}
+	</div>
+</div>
+
+{% endblock %}

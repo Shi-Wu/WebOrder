@@ -186,6 +186,7 @@ def order_list(req):
                'order_info': order_info,
                'have_order': have_order,
                'cart_count': Cart.get_cart_count(user),
+               'order_state': 'show_order',
                }
     return render_to_response('orderlist.html', content)
 
@@ -235,18 +236,28 @@ def order(req):
     usr = MyUser.get_user(req.session.get('username', ''))
     if usr == '':
         return HttpResponseRedirect("/login/")
+    arg_error = False
+    text = ''
     maxnum = int(req.GET.get("maxnum", 0))
     address = req.GET.get("address", "no place")
     transport = req.GET.get("transport", "no way")
-    print maxnum, ' maxnum'
+    if address == 'no place' or len(address) < 2 :
+        arg_error = True
+        text += ' The Address Error!'
+    if transport == 'no way' or (transport != 'Air' and transport != 'Ground'):
+        text += ' The Transport Means Error!'
     order_data = []
     for i in range(1, maxnum + 1):
         cart_item_id = int(req.GET.get("cart_itemid_name_" + str(i), -1))
         cart_item_amount = int(req.GET.get("cart_amount_name_" + str(i), -1))
         if cart_item_id != -1 and Instruments.check_item_id(cart_item_id, cart_item_amount):
+            if not Cart.objects.filter(user=usr, item_id__id=cart_item_id).exists():
+                arg_error = True
+                text += ' The Item in Cart Dose Not Exist!'
+                break
             order_data.append((cart_item_id, cart_item_amount))
     order_num = len(order_data)
-    if order_num > 0:
+    if order_num > 0 and not arg_error:
         new_order = OrderList.objects.create(
             user=usr,
             sum_price=0,
@@ -269,16 +280,37 @@ def order(req):
             sum_price += new_detail.price
             cur_item.count -= data[1]
             cur_item.save(force_update=True)
-            Cart.objects.get(user=usr, item_id=cur_item).delete()
-        new_order.sum_price = sum_price
-        new_order.weight = sum_weight
-        new_order.save(force_update=True)
-        content = {'user': usr,
-                   'active_menu': 'user_menu',
-                   'order_items': OrderDetail.objects.filter(order_id=new_order),
-                   'cart_count': Cart.get_cart_count(usr),
-                   }
-        return render_to_response('orderlist.html', content)
+            try:
+                Cart.objects.get(user=usr, item_id=cur_item).delete()
+            except Cart.DoseNotExist:
+                arg_error = True
+                text += '  The Item in Cart Dose Not Exist!'
+                new_order.delelte()
+                break
+        if not arg_error:
+            new_order.sum_price = sum_price
+            new_order.weight = sum_weight
+            new_order.save(force_update=True)
+            content = {'user': usr,
+                       'active_menu': 'user_menu',
+                       'order_items': OrderDetail.objects.filter(order_id=new_order),
+                       'cart_count': Cart.get_cart_count(usr),
+                       'order_state': 'order_success',
+                       'have_order': True,
+                       'order_info': new_order,
+                       }
+            return render_to_response('orderlist.html', content)
+    elif order_num <= 0:
+        arg_error = True
+        text += ' Error: You Don\'t Choose Anything!'
+    if arg_error:
+        content = {
+            'user': usr,
+            'cart_count': Cart.get_cart_count(usr),
+            'info_state': 'set_text',
+            'text': text,
+        }
+        return render_to_response("infos.html", content)
     return HttpResponseRedirect("/history/")
 
 
@@ -345,7 +377,22 @@ def add_to_cart(req):
         item.weight = instrument.weight * amount
         item.price = instrument.price * amount
         item.save(force_update=True)
-    return HttpResponseRedirect('/view/')
+    content = {'info_state': 'add_to_cart',
+               'user': usr,
+               'cart_count': Cart.get_cart_count(usr),
+               }
+    return render_to_response("infos.html", content)
+
+
+@login_required
+def clear_cart(req):
+    user = MyUser.get_user(req.session.get('username', ''))
+    Cart.init_user_cart(user)
+    content ={'info_state': 'clear_cart',
+              'user': user,
+              'cart_count': Cart.get_cart_count(user),
+              }
+    return render_to_response("infos.html", content)
 
 
 @login_required
