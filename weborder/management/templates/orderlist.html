@@ -6,11 +6,18 @@
 
 <div class="container">
 	<div class="row">
-		<div class="col-md-8 col-md-offset-2 well">
-			{% if order_items.count == 0 %}
-                <h2><p> Sorry,This Order Is Empty!</p></h2>
+        <div class="col-md-8 col-md-offset-2 well">
+            {% if order_items.count == 0 %}
+            <h2><p> Sorry,This Order Is Empty!</p></h2>
             {% else %}
-                <h3 class="text-center">Detail</h3>
+                {% if order_state == 'show_order' %}
+                    <h3 class="text-center">History Order Details.</h3>
+                {% elif order_state == 'order_success' %}
+                    <h3 class="text-center"> Order Successfully, Here Are Your Order in Detail.</h3>
+                {% else %}
+                    <h3 class="text-center">History Order in Detail.</h3>
+                {% endif %}
+                {% if have_order %}
                 <table class="table table-hover table-bordered">
                     <thead>
                     <tr>
@@ -30,12 +37,11 @@
                             <td>{{ item.weight }}</td>
                             <td>{{ item.price|floatformat:2 }}</td>
                         </tr>
-                    {% empty %}
+                        {% empty %}
                             <h3>No Order List Item At Present</h3>
                     {% endfor %}
                     </tbody>
                 </table>
-                {% if have_order %}
                     <h3 class="text-center">Summary</h3>
                     <table class="table table-bordered">
                         <thead>

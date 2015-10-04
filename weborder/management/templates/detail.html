@@ -18,9 +18,12 @@
 						<div class="carousel-inner" role="listbox">
 						{% for img in img_list %}
 							<div {% if forloop.first %}class="item active"{%else%}class="item"{% endif %}>
-								<img class="img-rounded" src="/{{img.img}}">
-							</div>
-						{% endfor %}
+                                <img class="img-rounded" src="/{{img.img}}">
+                                <h4 class="carousel-caption">
+                                    {{ img.desc }}
+                                </h4>
+                            </div>
+                        {% endfor %}
 						</div>
 						<a class="left carousel-control" href="#carousel-generic" role="button" data-slide="prev">
 							<span class="glyphicon glyphicon-chevron-left"></span>
@@ -35,19 +38,22 @@
 			</div>
 			<div class="col-md-4">
 {#                col-md-6 col-md-offset-1#}
-				<h2 class="text-left"><b>{{book.name}}</b></h2>
-				<h3>Brand：{{book.author}}</h3>
-				<h3>Category：{{book.typ}}</h3>
-                <h3>Date：{{book.pubDate|date:"Y-m-d"}}</h3>
-                <h3>Rest: {{book.count}}</h3>
-                <h3>Price：$ {{ book.price|floatformat:2 }}</h3>
-                <h3>Weight：{{ book.weight|floatformat:2 }} Kg</h3>
+				<h3 class="text-left"><b>{{book.name}}</b></h3>
+				<h4>Brand：{{book.author}}</h4>
+				<h4>Category：{{book.typ}}</h4>
+                <h4>Date：{{book.pubDate|date:"Y-m-d"}}</h4>
+                <h4>Rest: {{book.count}}</h4>
+                <h4>Price：$ {{ book.price|floatformat:2 }}</h4>
+                <h4>Weight：{{ book.weight|floatformat:2 }} Kg</h4>
+                <p>{{ book.desc }}</p>
                 {% if user %}
                 <form class="form-inline" role="form" method="get" action="{% url 'add_to_cart' %}">
                 <input type = "hidden" value="{{book.id}}"  name="id">
-                     <label><input type="hidden"  max="{{ book.count }}" min="1"  onkeyup="check()" name ="amount" value = 1></label>
+                     <label><input type="number" class="text-center"  max="{{ book.count }}" min="1"  onkeyup="check()" name ="amount" value = 1></label>
                     {% if book.count > 0 %}
-                        <br/>&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit"  class="btn btn-lg btn-primary">  Add to Cart  </button>
+                        <br/>
+                        <br/>
+                        <button type="submit"  class="btn btn-lg btn-primary text-center">  Add to Cart  </button>
                     {% endif %}
                 </form>
                 {% endif %}
