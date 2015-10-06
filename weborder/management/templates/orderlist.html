@@ -7,62 +7,66 @@
 <div class="container">
 	<div class="row">
         <div class="col-md-8 col-md-offset-2 well">
-            {% if order_items.count == 0 %}
-            <h2><p> Sorry,This Order Is Empty!</p></h2>
+            {% if order_state == 'wrong_order_id' %}
+                <h2><p> Error,Wrong Order ID!</p></h2>
             {% else %}
-                {% if order_state == 'show_order' %}
-                    <h3 class="text-center">History Order Details.</h3>
-                {% elif order_state == 'order_success' %}
-                    <h3 class="text-center"> Order Successfully, Here Are Your Order in Detail.</h3>
+                {% if order_items.count == 0 %}
+                    <h2><p> Sorry,This Order Is Empty!</p></h2>
                 {% else %}
-                    <h3 class="text-center">History Order in Detail.</h3>
-                {% endif %}
-                {% if have_order %}
-                <table class="table table-hover table-bordered">
-                    <thead>
-                    <tr>
-                        <th>No.</th>
-                        <th>Item</th>
-                        <th>Count</th>
-                        <th>Weight</th>
-                        <th>Price</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for item in order_items %}
-                        <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td><a href="{% url 'view_detail' %}?id={{item.item_id.id}}">{{ item.item_id.name }}</a></td>
-                            <td>{{ item.count }}</td>
-                            <td>{{ item.weight }}</td>
-                            <td>{{ item.price|floatformat:2 }}</td>
-                        </tr>
-                        {% empty %}
-                            <h3>No Order List Item At Present</h3>
-                    {% endfor %}
-                    </tbody>
-                </table>
-                    <h3 class="text-center">Summary</h3>
-                    <table class="table table-bordered">
-                        <thead>
-                        <tr>
-                            <th>Order Id</th>
-                            <th>Date Time</th>
-                            <th>Transport </th>
-                            <th>Total Price($)</th>
-                            <th>Total Weight(Kg)</th>
-                        </tr>
-                        <tbody>
+                    {% if order_state == 'show_order' %}
+                        <h3 class="text-center">History Order Details.</h3>
+                    {% elif order_state == 'order_success' %}
+                        <h3 class="text-center"> Order Successfully, Here Are Your Order in Detail.</h3>
+                    {% else %}
+                        <h3 class="text-center">History Order in Detail.</h3>
+                    {% endif %}
+                    {% if have_order %}
+                        <table class="table table-hover table-bordered">
+                            <thead>
                             <tr>
-                                <td>{{order_info.id}}</td>
-                                <td>{{ order_info.date }}</td>
-                                <td>{{ order_info.transport }}</td>
-                                <td>{{ order_info.sum_price }}</td>
-                                <td>{{ order_info.weight }}</td>
+                                <th>No.</th>
+                                <th>Item</th>
+                                <th>Count</th>
+                                <th>Weight</th>
+                                <th>Price</th>
                             </tr>
-                    </tbody>
-                        </thead>
-                    </table>
+                            </thead>
+                            <tbody>
+                            {% for item in order_items %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td><a href="{% url 'view_detail' %}?id={{item.item_id.id}}">{{ item.item_id.name }}</a></td>
+                                    <td>{{ item.count }}</td>
+                                    <td>{{ item.weight }}</td>
+                                    <td>{{ item.price|floatformat:2 }}</td>
+                                </tr>
+                                {% empty %}
+                                <h3>No Order List Item At Present</h3>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <h3 class="text-center">Summary</h3>
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Order Id</th>
+                                <th>Date Time</th>
+                                <th>Transport </th>
+                                <th>Total Price($)</th>
+                                <th>Total Weight(Kg)</th>
+                            </tr>
+                            <tbody>
+                        <tr>
+                            <td>{{order_info.id}}</td>
+                            <td>{{ order_info.date }}</td>
+                            <td>{{ order_info.transport }}</td>
+                            <td>{{ order_info.sum_price }}</td>
+                            <td>{{ order_info.weight }}</td>
+                        </tr>
+                        </tbody>
+                            </thead>
+                        </table>
+                    {% endif %}
                 {% endif %}
             {% endif %}
         </div>

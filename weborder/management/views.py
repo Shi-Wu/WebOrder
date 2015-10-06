@@ -168,25 +168,32 @@ def order_list(req):
     if user == '':
         return login(req)
     order_id = req.GET.get('order_id', '')
+    # order_user = OrderList.objects.
     if order_id == '':
         return HttpResponseRedirect('/history/')
     have_order = False
+    text = 'show_order'
     order_info = ''
-    if OrderList.objects.filter(pk=order_id).exists():
+    order_items = ''
+    if OrderList.objects.filter(pk=order_id, user=user).exists():
         have_order = True
         order_info = OrderList.objects.get(pk=order_id)
-    try:
-        order_items = OrderDetail.objects.filter(order_id__id=order_id)
-    except OrderDetail.DoesNotExist:
-        return history(req)
-        # return HttpResponseRedirect('/history/')
+    else:
+        text = 'wrong_order_id'
+    # get order details
+    if have_order:
+        try:
+            order_items = OrderDetail.objects.filter(order_id__id=order_id)
+        except OrderDetail.DoesNotExist:
+            return history(req)
+            # return HttpResponseRedirect('/history/')
     content = {'user': user,
                'active_menu': 'user_menu',
                'order_items': order_items,
                'order_info': order_info,
                'have_order': have_order,
                'cart_count': Cart.get_cart_count(user),
-               'order_state': 'show_order',
+               'order_state': text,
                }
     return render_to_response('orderlist.html', content)
 
